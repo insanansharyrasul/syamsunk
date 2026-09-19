@@ -1,5 +1,6 @@
 package com.example.syamsunk.widget
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
@@ -27,6 +28,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import androidx.core.graphics.toColorInt
 
 /**
  * Glance widget displaying the 5 daily prayer times in a horizontal layout.
@@ -58,6 +60,7 @@ class PrayerTimesWidget : GlanceAppWidget() {
     }
 }
 
+@SuppressLint("RestrictedApi", "ResourceType")
 @Composable
 private fun WidgetContent(times: List<Pair<String, String>>) {
     Row(
@@ -76,7 +79,7 @@ private fun WidgetContent(times: List<Pair<String, String>>) {
                 Text(
                     text = name,
                     style = TextStyle(
-                        color = ColorProvider(android.graphics.Color.parseColor("#9E9E9E")),
+                        color = ColorProvider("#9E9E9E".toColorInt()),
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -85,7 +88,7 @@ private fun WidgetContent(times: List<Pair<String, String>>) {
                 Text(
                     text = time,
                     style = TextStyle(
-                        color = ColorProvider(android.graphics.Color.parseColor("#757575")),
+                        color = ColorProvider("#757575".toColorInt()),
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Normal
                     )

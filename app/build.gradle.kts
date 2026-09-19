@@ -22,9 +22,11 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
-            optimization {
-                enable = true
-            }
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+                "src/main/keepRules/rules.keep"
+            )
         }
     }
 
