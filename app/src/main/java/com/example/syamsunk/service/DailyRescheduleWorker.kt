@@ -1,8 +1,6 @@
 package com.example.syamsunk.service
 
 import android.content.Context
-import androidx.glance.appwidget.GlanceAppWidgetManager
-import androidx.glance.appwidget.updateAll
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
@@ -61,9 +59,9 @@ class DailyRescheduleWorker(
         AdhanAlarmManager.cancelAlarms(appContext)
         AdhanAlarmManager.scheduleAlarms(appContext, prayerTimes)
 
-        // Refresh Glance widget
+        // Refresh widget
         try {
-            PrayerTimesWidget().updateAll(appContext)
+            PrayerTimesWidget.updateAll(appContext)
         } catch (_: Exception) {
             // Widget may not be placed
         }

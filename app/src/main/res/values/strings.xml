@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SyamsunK</string>
+    <string name="widget_description">Displays today\'s prayer times</string>
 </resources>

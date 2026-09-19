@@ -5,4 +5,14 @@
         <item name="android:navigationBarColor">#1A232A</item>
         <item name="android:windowBackground">#1A232A</item>
     </style>
+
+    <style name="Theme.Android.AppWidgetContainer" parent="android:Theme.DeviceDefault.DayNight">
+        <item name="android:textColor">@color/text_white</item>
+        <item name="android:textColorPrimary">@color/text_white</item>
+        <item name="android:textColorSecondary">@color/text_muted</item>
+    </style>
+
+    <style name="Widget.Android.AppWidget.Container" parent="android:Widget">
+        <item name="android:background">@drawable/widget_background</item>
+    </style>
 </resources>

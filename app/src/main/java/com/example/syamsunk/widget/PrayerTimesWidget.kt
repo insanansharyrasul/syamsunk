@@ -1,98 +1,136 @@
 package com.example.syamsunk.widget
 
-import android.annotation.SuppressLint
+import android.app.PendingIntent
+import android.appwidget.AppWidgetManager
+import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
 import android.content.Context
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.glance.GlanceId
-import androidx.glance.GlanceModifier
-import androidx.glance.GlanceTheme
-import androidx.glance.appwidget.GlanceAppWidget
-import androidx.glance.appwidget.provideContent
-import androidx.glance.background
-import androidx.glance.layout.Alignment
-import androidx.glance.layout.Column
-import androidx.glance.layout.Row
-import androidx.glance.layout.Spacer
-import androidx.glance.layout.fillMaxWidth
-import androidx.glance.layout.height
-import androidx.glance.layout.padding
-import androidx.glance.text.FontWeight
-import androidx.glance.text.Text
-import androidx.glance.text.TextStyle
-import androidx.glance.unit.ColorProvider
+import android.content.Intent
+import android.widget.RemoteViews
+import com.example.syamsunk.MainActivity
+import com.example.syamsunk.R
 import com.example.syamsunk.data.PrayerRepository
 import com.example.syamsunk.data.PreferencesRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import androidx.core.graphics.toColorInt
+import java.util.Locale
 
 /**
- * Glance widget displaying the 5 daily prayer times in a horizontal layout.
- * Matches the compact dark card design from Screenshot 2.
+ * AppWidgetProvider displaying the 5 daily prayer times in a horizontal layout.
  */
-class PrayerTimesWidget : GlanceAppWidget() {
+class PrayerTimesWidget : AppWidgetProvider() {
 
-    override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val prefsRepo = PreferencesRepository(context)
-        val location = prefsRepo.locationFlow.first()
-
-        val tz = TimeZone.currentSystemDefault()
-        val today = Clock.System.now().toLocalDateTime(tz).date
-        val times = if (location != null) {
-            val daily = PrayerRepository.calculate(location.latitude, location.longitude, today)
-            daily.toList().map { (name, instant) ->
-                val lt = instant.toLocalDateTime(tz)
-                name to String.format(java.util.Locale.getDefault(), "%02d:%02d", lt.hour, lt.minute)
-            }
-        } else {
-            listOf("Fajr" to "--:--", "Dhuhr" to "--:--", "Asr" to "--:--", "Maghrib" to "--:--", "Isha" to "--:--")
-        }
-
-        provideContent {
-            GlanceTheme {
-                WidgetContent(times)
+    override fun onUpdate(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetIds: IntArray
+    ) {
+        val pendingResult = goAsync()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                performUpdate(context, appWidgetManager, appWidgetIds)
+            } finally {
+                pendingResult.finish()
             }
         }
     }
-}
 
-@SuppressLint("RestrictedApi", "ResourceType")
-@Composable
-private fun WidgetContent(times: List<Pair<String, String>>) {
-    Row(
-        modifier = GlanceModifier
-            .fillMaxWidth()
-            .background(androidx.glance.ImageProvider(com.example.syamsunk.R.drawable.widget_background))
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        times.forEachIndexed { index, (name, time) ->
-            Column(
-                modifier = GlanceModifier.defaultWeight(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = name,
-                    style = TextStyle(
-                        color = ColorProvider("#9E9E9E".toColorInt()),
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+    fun updateAll(context: Context) {
+        Companion.updateAll(context)
+    }
+
+    companion object {
+        fun updateAll(context: Context) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val appWidgetManager = AppWidgetManager.getInstance(context)
+                val ids = appWidgetManager.getAppWidgetIds(
+                    ComponentName(context, PrayerTimesWidget::class.java)
                 )
-                Spacer(modifier = GlanceModifier.height(4.dp))
-                Text(
-                    text = time,
-                    style = TextStyle(
-                        color = ColorProvider("#757575".toColorInt()),
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Normal
-                    )
-                )
+                if (ids.isNotEmpty()) {
+                    performUpdate(context, appWidgetManager, ids)
+                }
+            }
+        }
+
+        fun updateWidgets(
+            context: Context,
+            appWidgetManager: AppWidgetManager,
+            appWidgetIds: IntArray
+        ) {
+            CoroutineScope(Dispatchers.IO).launch {
+                performUpdate(context, appWidgetManager, appWidgetIds)
+            }
+        }
+
+        private suspend fun performUpdate(
+            context: Context,
+            appWidgetManager: AppWidgetManager,
+            appWidgetIds: IntArray
+        ) {
+            val prefsRepo = PreferencesRepository(context)
+            val location = prefsRepo.locationFlow.first()
+
+            val tz = TimeZone.currentSystemDefault()
+            val now = Clock.System.now()
+            val today = now.toLocalDateTime(tz).date
+
+            val daily = if (location != null) {
+                PrayerRepository.calculate(location.latitude, location.longitude, today)
+            } else {
+                null
+            }
+
+            fun formatTime(instant: Instant?): String {
+                if (instant == null) return "--:--"
+                val lt = instant.toLocalDateTime(tz)
+                return String.format(Locale.getDefault(), "%02d:%02d", lt.hour, lt.minute)
+            }
+
+            val fajrStr = formatTime(daily?.fajr)
+            val dhuhrStr = formatTime(daily?.dhuhr)
+            val asrStr = formatTime(daily?.asr)
+            val maghribStr = formatTime(daily?.maghrib)
+            val ishaStr = formatTime(daily?.isha)
+
+            val intent = Intent(context, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            }
+            val pendingIntent = PendingIntent.getActivity(
+                context,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+
+            for (appWidgetId in appWidgetIds) {
+                val views = RemoteViews(context.packageName, R.layout.prayer_widget)
+
+                views.setTextViewText(R.id.fajr_time, fajrStr)
+                views.setTextViewText(R.id.dhuhr_time, dhuhrStr)
+                views.setTextViewText(R.id.asr_time, asrStr)
+                views.setTextViewText(R.id.maghrib_time, maghribStr)
+                views.setTextViewText(R.id.isha_time, ishaStr)
+
+                // Launch main app when tapped
+                views.setOnClickPendingIntent(R.id.widget_root, pendingIntent)
+                views.setOnClickPendingIntent(R.id.fajr_label, pendingIntent)
+                views.setOnClickPendingIntent(R.id.fajr_time, pendingIntent)
+                views.setOnClickPendingIntent(R.id.dhuhr_label, pendingIntent)
+                views.setOnClickPendingIntent(R.id.dhuhr_time, pendingIntent)
+                views.setOnClickPendingIntent(R.id.asr_label, pendingIntent)
+                views.setOnClickPendingIntent(R.id.asr_time, pendingIntent)
+                views.setOnClickPendingIntent(R.id.maghrib_label, pendingIntent)
+                views.setOnClickPendingIntent(R.id.maghrib_time, pendingIntent)
+                views.setOnClickPendingIntent(R.id.isha_label, pendingIntent)
+                views.setOnClickPendingIntent(R.id.isha_time, pendingIntent)
+
+                appWidgetManager.updateAppWidget(appWidgetId, views)
             }
         }
     }

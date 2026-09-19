@@ -10,6 +10,7 @@ import com.example.syamsunk.data.PreferencesRepository
 import com.example.syamsunk.data.model.DailyPrayerTimes
 import com.example.syamsunk.service.AdhanAlarmManager
 import com.example.syamsunk.service.DailyRescheduleWorker
+import com.example.syamsunk.widget.PrayerTimesWidget
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -73,6 +74,7 @@ class PrayerViewModel(application: Application) : AndroidViewModel(application) 
                 prefsRepo.saveLocation(result.latitude, result.longitude, result.address)
                 calculateAndUpdate(result.latitude, result.longitude, result.address)
                 scheduleAlarms(result.latitude, result.longitude)
+                PrayerTimesWidget.updateAll(getApplication())
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
