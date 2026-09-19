@@ -20,8 +20,10 @@ android {
 
     buildTypes {
         release {
+            isMinifyEnabled = true
+            isShrinkResources = true
             optimization {
-                enable = false
+                enable = true
             }
         }
     }
@@ -36,16 +38,9 @@ android {
     }
 }
 
-configurations.all {
-    resolutionStrategy.force("org.jetbrains.kotlin:kotlin-stdlib:2.1.20")
-    resolutionStrategy.force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.20")
-    resolutionStrategy.force("org.jetbrains.kotlin:kotlin-reflect:2.1.20")
-}
-
 dependencies {
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom:2.1.20"))
-
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
