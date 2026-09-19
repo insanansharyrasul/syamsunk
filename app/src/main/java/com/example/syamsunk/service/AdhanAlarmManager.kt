@@ -30,7 +30,7 @@ object AdhanAlarmManager {
                     putExtra("prayer_name", name)
                     val tz = TimeZone.currentSystemDefault()
                     val localTime = instant.toLocalDateTime(tz)
-                    putExtra("prayer_time", "%02d:%02d".format(localTime.hour, localTime.minute))
+                    putExtra("prayer_time", String.format(java.util.Locale.getDefault(), "%02d:%02d", localTime.hour, localTime.minute))
                 }
                 val pendingIntent = PendingIntent.getBroadcast(
                     context,

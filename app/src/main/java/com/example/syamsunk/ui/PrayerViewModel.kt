@@ -3,7 +3,7 @@ package com.example.syamsunk.ui
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.batoulapps.adhan2.CalculationMethod
+import com.batoulapps.adhan.CalculationMethod
 import com.example.syamsunk.data.LocationManager
 import com.example.syamsunk.data.PrayerRepository
 import com.example.syamsunk.data.PreferencesRepository
@@ -20,6 +20,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import java.util.Locale
 
 data class PrayerUiState(
     val isLoading: Boolean = true,
@@ -89,15 +90,12 @@ class PrayerViewModel(application: Application) : AndroidViewModel(application) 
         val daily = PrayerRepository.calculate(lat, lng, today)
         val items = daily.toList().map { (name, instant) ->
             val lt = instant.toLocalDateTime(tz)
-            PrayerTimeItem(name, "%02d:%02d".format(lt.hour, lt.minute), instant)
+            PrayerTimeItem(name, String.format(Locale.getDefault(), "%02d:%02d", lt.hour, lt.minute), instant)
         }
 
         // Find next prayer (first one after now)
         val nextIndex = items.indexOfFirst { it.instant > now }
-        val activeIndex = if (nextIndex >= 0) nextIndex else {
-            // All prayers have passed today - next is tomorrow's Fajr
-            0
-        }
+        val activeIndex = if (nextIndex >= 0) nextIndex else 0
 
         val nextPrayer = items.getOrNull(activeIndex)
         val countdown = nextPrayer?.let { computeCountdown(now, it.instant) } ?: ""
@@ -160,6 +158,6 @@ class PrayerViewModel(application: Application) : AndroidViewModel(application) 
         val hours = diff / 3600
         val minutes = (diff % 3600) / 60
         val seconds = diff % 60
-        return "%02d:%02d:%02d".format(hours, minutes, seconds)
+        return String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds)
     }
 }

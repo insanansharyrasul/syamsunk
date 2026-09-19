@@ -1,16 +1,16 @@
 package com.example.syamsunk.data
 
-import com.batoulapps.adhan2.CalculationMethod
-import com.batoulapps.adhan2.CalculationParameters
-import com.batoulapps.adhan2.Coordinates
-import com.batoulapps.adhan2.DateComponents
-import com.batoulapps.adhan2.Madhab
-import com.batoulapps.adhan2.PrayerTimes
+import com.batoulapps.adhan.CalculationMethod
+import com.batoulapps.adhan.Coordinates
+import com.batoulapps.adhan.data.DateComponents
+import com.batoulapps.adhan.Madhab
+import com.batoulapps.adhan.PrayerTimes
 import com.example.syamsunk.data.model.DailyPrayerTimes
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 
 /**
- * Calculates prayer times on-the-fly using the Adhan2 library.
+ * Calculates prayer times on-the-fly using the Adhan library.
  * No database storage — computation is fast enough for real-time use.
  */
 object PrayerRepository {
@@ -28,11 +28,11 @@ object PrayerRepository {
         params.madhab = madhab
         val pt = PrayerTimes(coordinates, dateComponents, params)
         return DailyPrayerTimes(
-            fajr = pt.fajr,
-            dhuhr = pt.dhuhr,
-            asr = pt.asr,
-            maghrib = pt.maghrib,
-            isha = pt.isha
+            fajr = Instant.fromEpochMilliseconds(pt.fajr.time),
+            dhuhr = Instant.fromEpochMilliseconds(pt.dhuhr.time),
+            asr = Instant.fromEpochMilliseconds(pt.asr.time),
+            maghrib = Instant.fromEpochMilliseconds(pt.maghrib.time),
+            isha = Instant.fromEpochMilliseconds(pt.isha.time)
         )
     }
 }

@@ -40,12 +40,11 @@ class PrayerTimesWidget : GlanceAppWidget() {
 
         val tz = TimeZone.currentSystemDefault()
         val today = Clock.System.now().toLocalDateTime(tz).date
-
         val times = if (location != null) {
             val daily = PrayerRepository.calculate(location.latitude, location.longitude, today)
             daily.toList().map { (name, instant) ->
                 val lt = instant.toLocalDateTime(tz)
-                name to "%02d:%02d".format(lt.hour, lt.minute)
+                name to String.format(java.util.Locale.getDefault(), "%02d:%02d", lt.hour, lt.minute)
             }
         } else {
             listOf("Fajr" to "--:--", "Dhuhr" to "--:--", "Asr" to "--:--", "Maghrib" to "--:--", "Isha" to "--:--")

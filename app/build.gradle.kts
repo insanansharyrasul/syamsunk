@@ -36,7 +36,14 @@ android {
     }
 }
 
+configurations.all {
+    resolutionStrategy.force("org.jetbrains.kotlin:kotlin-stdlib:2.1.20")
+    resolutionStrategy.force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.20")
+    resolutionStrategy.force("org.jetbrains.kotlin:kotlin-reflect:2.1.20")
+}
+
 dependencies {
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:2.1.20"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -59,7 +66,7 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.play.services.location)
 
-    implementation(libs.adhan2)
+    implementation(libs.adhan)
     implementation(libs.kotlinx.datetime)
 
     testImplementation(libs.junit)
