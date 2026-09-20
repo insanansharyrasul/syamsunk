@@ -1,11 +1,11 @@
-package com.example.syamsunk.data
+package com.insan.syamsunk.data
 
 import com.batoulapps.adhan.CalculationMethod
 import com.batoulapps.adhan.Coordinates
 import com.batoulapps.adhan.data.DateComponents
 import com.batoulapps.adhan.Madhab
 import com.batoulapps.adhan.PrayerTimes
-import com.example.syamsunk.data.model.DailyPrayerTimes
+import com.insan.syamsunk.data.model.DailyPrayerTimes
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 

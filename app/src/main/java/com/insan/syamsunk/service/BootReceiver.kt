@@ -1,4 +1,4 @@
-package com.example.syamsunk.service
+package com.insan.syamsunk.service
 
 import android.content.BroadcastReceiver
 import android.content.Context

@@ -1,4 +1,4 @@
-package com.example.syamsunk.data.model
+package com.insan.syamsunk.data.model
 
 import kotlinx.datetime.Instant
 

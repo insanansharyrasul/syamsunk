@@ -1,4 +1,4 @@
-package com.example.syamsunk.data
+package com.insan.syamsunk.data
 
 import android.content.Context
 import androidx.datastore.core.DataStore

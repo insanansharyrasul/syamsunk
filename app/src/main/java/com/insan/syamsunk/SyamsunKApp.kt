@@ -1,7 +1,7 @@
-package com.example.syamsunk
+package com.insan.syamsunk
 
 import android.app.Application
-import com.example.syamsunk.service.DailyRescheduleWorker
+import com.insan.syamsunk.service.DailyRescheduleWorker
 
 class SyamsunKApp : Application() {
     override fun onCreate() {

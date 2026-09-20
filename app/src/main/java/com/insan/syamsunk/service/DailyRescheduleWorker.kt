@@ -1,4 +1,4 @@
-package com.example.syamsunk.service
+package com.insan.syamsunk.service
 
 import android.content.Context
 import androidx.work.CoroutineWorker
@@ -6,9 +6,9 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import com.example.syamsunk.data.PrayerRepository
-import com.example.syamsunk.data.PreferencesRepository
-import com.example.syamsunk.widget.PrayerTimesWidget
+import com.insan.syamsunk.data.PrayerRepository
+import com.insan.syamsunk.data.PreferencesRepository
+import com.insan.syamsunk.widget.PrayerTimesWidget
 import kotlinx.coroutines.flow.first
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone

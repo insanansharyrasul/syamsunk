@@ -1,4 +1,4 @@
-package com.example.syamsunk.data
+package com.insan.syamsunk.data
 
 import android.annotation.SuppressLint
 import android.content.Context

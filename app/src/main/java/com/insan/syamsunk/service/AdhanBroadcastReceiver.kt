@@ -1,4 +1,4 @@
-package com.example.syamsunk.service
+package com.insan.syamsunk.service
 
 import android.Manifest
 import android.app.NotificationChannel
@@ -11,7 +11,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import com.example.syamsunk.R
+import com.insan.syamsunk.R
 
 /**
  * Fires when an exact alarm triggers for a prayer time.

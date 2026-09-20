@@ -1,4 +1,4 @@
-package com.example.syamsunk
+package com.insan.syamsunk
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -13,8 +13,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
-import com.example.syamsunk.ui.PrayerScreen
-import com.example.syamsunk.ui.PrayerViewModel
+import com.insan.syamsunk.ui.PrayerScreen
+import com.insan.syamsunk.ui.PrayerViewModel
 
 class MainActivity : ComponentActivity() {
 

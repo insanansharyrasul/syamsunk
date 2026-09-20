@@ -1,17 +1,16 @@
-package com.example.syamsunk.ui
+package com.insan.syamsunk.ui
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.batoulapps.adhan.CalculationMethod
 import com.batoulapps.adhan.Madhab
-import com.example.syamsunk.data.LocationManager
-import com.example.syamsunk.data.PrayerRepository
-import com.example.syamsunk.data.PreferencesRepository
-import com.example.syamsunk.data.model.DailyPrayerTimes
-import com.example.syamsunk.service.AdhanAlarmManager
-import com.example.syamsunk.service.DailyRescheduleWorker
-import com.example.syamsunk.widget.PrayerTimesWidget
+import com.insan.syamsunk.data.LocationManager
+import com.insan.syamsunk.data.PrayerRepository
+import com.insan.syamsunk.data.PreferencesRepository
+import com.insan.syamsunk.service.AdhanAlarmManager
+import com.insan.syamsunk.service.DailyRescheduleWorker
+import com.insan.syamsunk.widget.PrayerTimesWidget
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

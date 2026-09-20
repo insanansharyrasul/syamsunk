@@ -1,8 +1,8 @@
-package com.example.syamsunk
+package com.insan.syamsunk
 
 import com.batoulapps.adhan.CalculationMethod
 import com.batoulapps.adhan.Madhab
-import com.example.syamsunk.data.PrayerRepository
+import com.insan.syamsunk.data.PrayerRepository
 import kotlinx.datetime.LocalDate
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

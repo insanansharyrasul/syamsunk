@@ -1,12 +1,11 @@
-package com.example.syamsunk.service
+package com.insan.syamsunk.service
 
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import com.example.syamsunk.data.model.DailyPrayerTimes
-import kotlinx.datetime.Instant
+import com.insan.syamsunk.data.model.DailyPrayerTimes
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -26,7 +25,7 @@ object AdhanAlarmManager {
             val triggerAtMillis = instant.toEpochMilliseconds()
             if (triggerAtMillis > now) {
                 val intent = Intent(context, AdhanBroadcastReceiver::class.java).apply {
-                    action = "com.example.syamsunk.ADHAN_ALARM"
+                    action = "com.insan.syamsunk.ADHAN_ALARM"
                     putExtra("prayer_name", name)
                     val tz = TimeZone.currentSystemDefault()
                     val localTime = instant.toLocalDateTime(tz)
@@ -58,7 +57,7 @@ object AdhanAlarmManager {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         for (i in 0..4) {
             val intent = Intent(context, AdhanBroadcastReceiver::class.java).apply {
-                action = "com.example.syamsunk.ADHAN_ALARM"
+                action = "com.insan.syamsunk.ADHAN_ALARM"
             }
             val pendingIntent = PendingIntent.getBroadcast(
                 context,

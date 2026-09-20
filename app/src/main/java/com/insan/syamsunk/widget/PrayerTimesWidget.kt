@@ -1,4 +1,4 @@
-package com.example.syamsunk.widget
+package com.insan.syamsunk.widget
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -7,10 +7,10 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
-import com.example.syamsunk.MainActivity
-import com.example.syamsunk.R
-import com.example.syamsunk.data.PrayerRepository
-import com.example.syamsunk.data.PreferencesRepository
+import com.insan.syamsunk.MainActivity
+import com.insan.syamsunk.R
+import com.insan.syamsunk.data.PrayerRepository
+import com.insan.syamsunk.data.PreferencesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
