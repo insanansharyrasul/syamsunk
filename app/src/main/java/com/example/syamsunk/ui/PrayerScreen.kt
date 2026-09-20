@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Alarm
 import androidx.compose.material.icons.outlined.Settings
@@ -21,6 +22,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,6 +43,19 @@ private val TextMuted = Color(0xFFB0BEC5)
 @Composable
 fun PrayerScreen(viewModel: PrayerViewModel) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    var showSettingsDialog by remember { mutableStateOf(false) }
+
+    if (showSettingsDialog) {
+        SettingsDialog(
+            currentMethod = state.calculationMethod,
+            currentMadhab = state.madhab,
+            onDismiss = { showSettingsDialog = false },
+            onSave = { method, madhab ->
+                viewModel.updateSettings(method, madhab)
+                showSettingsDialog = false
+            }
+        )
+    }
 
     Box(
         modifier = Modifier
@@ -54,10 +71,14 @@ fun PrayerScreen(viewModel: PrayerViewModel) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .statusBarsPadding()
                     .padding(top = 16.dp)
             ) {
                 // Header
-                HeaderSection(address = state.address)
+                HeaderSection(
+                    address = state.address,
+                    onSettingsClick = { showSettingsDialog = true }
+                )
 
                 Spacer(modifier = Modifier.height(24.dp))
 
@@ -90,7 +111,10 @@ fun PrayerScreen(viewModel: PrayerViewModel) {
 }
 
 @Composable
-private fun HeaderSection(address: String) {
+private fun HeaderSection(
+    address: String,
+    onSettingsClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -114,18 +138,10 @@ private fun HeaderSection(address: String) {
             }
         }
         Row {
-            IconButton(onClick = { /* Settings */ }) {
+            IconButton(onClick = onSettingsClick) {
                 Icon(
                     imageVector = Icons.Outlined.Settings,
                     contentDescription = "Settings",
-                    tint = TextWhite,
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-            IconButton(onClick = { /* Alarm */ }) {
-                Icon(
-                    imageVector = Icons.Outlined.Alarm,
-                    contentDescription = "Alarm",
                     tint = TextWhite,
                     modifier = Modifier.size(24.dp)
                 )

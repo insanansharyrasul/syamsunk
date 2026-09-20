@@ -80,8 +80,15 @@ class PrayerTimesWidget : AppWidgetProvider() {
             val now = Clock.System.now()
             val today = now.toLocalDateTime(tz).date
 
+            val settings = prefsRepo.userSettingsFlow.first()
             val daily = if (location != null) {
-                PrayerRepository.calculate(location.latitude, location.longitude, today)
+                PrayerRepository.calculate(
+                    latitude = location.latitude,
+                    longitude = location.longitude,
+                    date = today,
+                    method = settings.calculationMethod,
+                    madhab = settings.madhab
+                )
             } else {
                 null
             }

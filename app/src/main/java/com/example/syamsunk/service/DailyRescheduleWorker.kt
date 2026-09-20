@@ -49,10 +49,13 @@ class DailyRescheduleWorker(
         val location = prefsRepo.locationFlow.first() ?: return Result.retry()
 
         val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+        val settings = prefsRepo.userSettingsFlow.first()
         val prayerTimes = PrayerRepository.calculate(
             latitude = location.latitude,
             longitude = location.longitude,
-            date = today
+            date = today,
+            method = settings.calculationMethod,
+            madhab = settings.madhab
         )
 
         // Reschedule exact alarms
