@@ -19,3 +19,4 @@ release/
 *.keystore
 upload-key.jks
 /tmp/
+.env
