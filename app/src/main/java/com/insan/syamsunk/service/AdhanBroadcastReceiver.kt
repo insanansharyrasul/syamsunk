@@ -39,7 +39,7 @@ class AdhanBroadcastReceiver : BroadcastReceiver() {
         }
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_stat_name)
             .setContentTitle("$prayerName - $prayerTime")
             .setContentText("It's time for $prayerName prayer")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
