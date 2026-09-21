@@ -24,6 +24,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 import java.util.Locale
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 data class PrayerUiState(
@@ -183,7 +184,7 @@ class PrayerViewModel(application: Application) : AndroidViewModel(application) 
     private fun startCountdownTicker() {
         viewModelScope.launch {
             while (true) {
-                delay(1000)
+                delay(1000.milliseconds)
                 val state = _uiState.value
                 if (state.prayerTimes.isNotEmpty()) {
                     val now = Clock.System.now()
