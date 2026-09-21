@@ -9,12 +9,26 @@ android {
         version = release(37)
     }
 
+    signingConfigs {
+        create("release") {
+            // ponytail: env-first for CI, gradle property fallback for local ~/.gradle/gradle.properties
+            val ksPath = System.getenv("KEYSTORE_PATH") ?: (findProperty("KEYSTORE_PATH") as String?)
+            if (!ksPath.isNullOrEmpty()) {
+                storeFile = file(ksPath)
+                storePassword = System.getenv("KEYSTORE_PASSWORD") ?: (findProperty("KEYSTORE_PASSWORD") as String?)
+                keyAlias = System.getenv("KEY_ALIAS") ?: (findProperty("KEY_ALIAS") as String?)
+                keyPassword = System.getenv("KEY_PASSWORD") ?: (findProperty("KEY_PASSWORD") as String?)
+            }
+        }
+    }
+
     defaultConfig {
         applicationId = "com.insan.syamsunk"
         minSdk = 26
         targetSdk = 37
-        versionCode = 2
-        versionName = "1.1"
+        // ponytail: CI passes -PversionCode/-PversionName; fallback keeps local builds working
+        versionCode = (findProperty("versionCode") as String?)?.toIntOrNull() ?: 2
+        versionName = (findProperty("versionName") as String?) ?: "1.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -27,6 +41,11 @@ android {
                 "proguard-rules.pro",
                 "src/main/keepRules/rules.keep"
             )
+            // ponytail: only sign when keystore file actually exists; otherwise unsigned (CI will have it, local still builds)
+            val ksPath = System.getenv("KEYSTORE_PATH") ?: (findProperty("KEYSTORE_PATH") as String?)
+            if (!ksPath.isNullOrEmpty() && file(ksPath).exists()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
 
