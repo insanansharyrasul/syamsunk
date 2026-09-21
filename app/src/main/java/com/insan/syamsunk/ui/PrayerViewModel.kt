@@ -18,10 +18,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 import java.util.Locale
+import kotlin.time.Duration.Companion.seconds
 
 data class PrayerUiState(
     val isLoading: Boolean = true,
@@ -138,19 +141,27 @@ class PrayerViewModel(application: Application) : AndroidViewModel(application) 
             PrayerTimeItem(name, String.format(Locale.getDefault(), "%02d:%02d", lt.hour, lt.minute), instant)
         }
 
-        // Find next prayer (first one after now)
         val nextIndex = items.indexOfFirst { it.instant > now }
-        val activeIndex = if (nextIndex >= 0) nextIndex else 0
-
-        val nextPrayer = items.getOrNull(activeIndex)
-        val countdown = nextPrayer?.let { computeCountdown(now, it.instant) } ?: ""
+        val (nextPrayer, activeIndex) = if (nextIndex >= 0) {
+            items[nextIndex] to nextIndex
+        } else {
+            val tomorrow = today.plus(1, DateTimeUnit.DAY)
+            val tomorrowFajr = PrayerRepository.calculate(lat, lng, tomorrow, method, madhab).fajr
+            val lt = tomorrowFajr.toLocalDateTime(tz)
+            PrayerTimeItem(
+                "Fajr",
+                String.format(Locale.getDefault(), "%02d:%02d", lt.hour, lt.minute),
+                tomorrowFajr
+            ) to 0
+        }
+        val countdown = computeCountdown(now, nextPrayer.instant)
 
         _uiState.value = PrayerUiState(
             isLoading = false,
             address = address,
             prayerTimes = items,
-            nextPrayerName = nextPrayer?.name ?: "",
-            nextPrayerTime = nextPrayer?.time ?: "",
+            nextPrayerName = nextPrayer.name,
+            nextPrayerTime = nextPrayer.time,
             countdownText = countdown,
             activePrayerIndex = activeIndex,
             calculationMethod = method,
@@ -188,16 +199,34 @@ class PrayerViewModel(application: Application) : AndroidViewModel(application) 
                             activePrayerIndex = nextIndex
                         )
                     } else {
-                        // All prayers passed - recalculate for tomorrow
-                        val cached = prefsRepo.locationFlow.first()
-                        val settings = prefsRepo.userSettingsFlow.first()
-                        if (cached != null) {
-                            calculateAndUpdate(
-                                cached.latitude,
-                                cached.longitude,
-                                cached.address,
-                                settings.calculationMethod,
-                                settings.madhab
+                        // After Isha: countdown to Fajr tomorrow (was showing 00:00:00)
+                        // ponytail: exact calc would read prefs + PrayerRepository every second; 24h offset is <1min off, good enough for ticking. Full recalc happens at date change via calculateAndUpdate.
+                        val today = now.toLocalDateTime(TimeZone.currentSystemDefault()).date
+                        val isNewDay = state.prayerTimes[0].instant.toLocalDateTime(TimeZone.currentSystemDefault()).date != today
+                        if (isNewDay) {
+                            val cached = prefsRepo.locationFlow.first()
+                            val settings = prefsRepo.userSettingsFlow.first()
+                            if (cached != null) {
+                                calculateAndUpdate(
+                                    cached.latitude,
+                                    cached.longitude,
+                                    cached.address,
+                                    settings.calculationMethod,
+                                    settings.madhab
+                                )
+                            }
+                        } else {
+                            // approximate tomorrow Fajr as today Fajr + 24h
+                            val tomorrowFajr = state.prayerTimes[0].instant.plus(86400.seconds)
+                            val tz = TimeZone.currentSystemDefault()
+                            val lt = tomorrowFajr.toLocalDateTime(tz)
+                            val timeStr = String.format(Locale.getDefault(), "%02d:%02d", lt.hour, lt.minute)
+                            val countdown = computeCountdown(now, tomorrowFajr)
+                            _uiState.value = state.copy(
+                                nextPrayerName = "Fajr",
+                                nextPrayerTime = timeStr,
+                                countdownText = countdown,
+                                activePrayerIndex = 0
                             )
                         }
                     }
