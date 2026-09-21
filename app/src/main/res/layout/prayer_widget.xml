@@ -5,112 +5,132 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:padding="5dp"
+    android:padding="4dp"
     android:gravity="center"
     android:theme="@style/Theme.Android.AppWidgetContainer">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="10dp">
+        android:padding="4dp">
         <TextView
             android:id="@+id/fajr_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Fajr"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end" />
         <TextView
             android:id="@+id/fajr_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="--:--"
-            android:textSize="16sp" />
+            android:textSize="12sp"
+            android:maxLines="1" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="10dp">
+        android:padding="4dp">
         <TextView
             android:id="@+id/dhuhr_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Dhuhr"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end" />
         <TextView
             android:id="@+id/dhuhr_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="--:--"
-            android:textSize="16sp" />
+            android:textSize="12sp"
+            android:maxLines="1" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="10dp">
+        android:padding="4dp">
         <TextView
             android:id="@+id/asr_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Asr"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end" />
         <TextView
             android:id="@+id/asr_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="--:--"
-            android:textSize="16sp" />
+            android:textSize="12sp"
+            android:maxLines="1" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="10dp">
+        android:padding="4dp">
         <TextView
             android:id="@+id/maghrib_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Maghrib"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end" />
         <TextView
             android:id="@+id/maghrib_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="--:--"
-            android:textSize="16sp" />
+            android:textSize="12sp"
+            android:maxLines="1" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="10dp">
+        android:padding="4dp">
         <TextView
             android:id="@+id/isha_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Isha"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end" />
         <TextView
             android:id="@+id/isha_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="--:--"
-            android:textSize="16sp" />
+            android:textSize="12sp"
+            android:maxLines="1" />
     </LinearLayout>
 </LinearLayout>
