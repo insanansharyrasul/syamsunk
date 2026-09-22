@@ -6,6 +6,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import androidx.glance.appwidget.updateAll
 import com.insan.syamsunk.data.PrayerRepository
 import com.insan.syamsunk.data.PreferencesRepository
 import com.insan.syamsunk.widget.PrayerTimesWidget
@@ -64,7 +65,7 @@ class DailyRescheduleWorker(
 
         // Refresh widget
         try {
-            PrayerTimesWidget.updateAll(appContext)
+            PrayerTimesWidget().updateAll(appContext)
         } catch (_: Exception) {
             // Widget may not be placed
         }

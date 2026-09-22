@@ -58,7 +58,7 @@
 
         <!-- Prayer Times App Widget Receiver -->
         <receiver
-            android:name=".widget.PrayerTimesWidget"
+            android:name=".widget.PrayerTimesWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

@@ -3,6 +3,7 @@ package com.insan.syamsunk.ui
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.glance.appwidget.updateAll
 import com.batoulapps.adhan.CalculationMethod
 import com.batoulapps.adhan.Madhab
 import com.insan.syamsunk.data.LocationManager
@@ -98,7 +99,7 @@ class PrayerViewModel(application: Application) : AndroidViewModel(application) 
                     settings.madhab
                 )
                 scheduleAlarms(result.latitude, result.longitude, settings.calculationMethod, settings.madhab)
-                PrayerTimesWidget.updateAll(getApplication())
+                PrayerTimesWidget().updateAll(getApplication())
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
@@ -115,7 +116,7 @@ class PrayerViewModel(application: Application) : AndroidViewModel(application) 
             if (cached != null) {
                 calculateAndUpdate(cached.latitude, cached.longitude, cached.address, method, madhab)
                 scheduleAlarms(cached.latitude, cached.longitude, method, madhab)
-                PrayerTimesWidget.updateAll(getApplication())
+                PrayerTimesWidget().updateAll(getApplication())
             } else {
                 _uiState.value = _uiState.value.copy(
                     calculationMethod = method,
