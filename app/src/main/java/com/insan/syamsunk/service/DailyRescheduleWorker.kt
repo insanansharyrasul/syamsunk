@@ -12,7 +12,11 @@ import com.insan.syamsunk.data.PreferencesRepository
 import com.insan.syamsunk.widget.PrayerTimesWidget
 import kotlinx.coroutines.flow.first
 import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atTime
+import kotlinx.datetime.plus
+import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import java.util.concurrent.TimeUnit
 
@@ -34,12 +38,16 @@ class DailyRescheduleWorker(
         private const val WORK_NAME = "daily_reschedule"
 
         fun enqueueDaily(context: Context) {
+            val tz = TimeZone.currentSystemDefault()
+            val now = Clock.System.now()
+            val midnight = now.toLocalDateTime(tz).date.plus(1, DateTimeUnit.DAY).atTime(0, 0).toInstant(tz)
+            val delay = (midnight - now).inWholeMilliseconds.coerceAtLeast(0)
             val request = PeriodicWorkRequestBuilder<DailyRescheduleWorker>(
                 24, TimeUnit.HOURS
-            ).build()
+            ).setInitialDelay(delay, TimeUnit.MILLISECONDS).build()
             WorkManager.getInstance(context).enqueueUniquePeriodicWork(
                 WORK_NAME,
-                ExistingPeriodicWorkPolicy.KEEP,
+                ExistingPeriodicWorkPolicy.UPDATE,
                 request
             )
         }
